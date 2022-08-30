@@ -2,7 +2,7 @@
  * vue-filepond v7.0.3
  * A handy FilePond adapter component for Vue
  * 
- * Copyright (c) 2022 PQINA
+ * Copyright (c) 2023 PQINA
  * https://pqina.nl/filepond
  * 
  * Licensed under the MIT license.
@@ -143,7 +143,7 @@ export default (...plugins) => {
       // Map FilePond callback methods to Vue $emitters
       const options = events.reduce((obj, value) => {
         obj[value] = (...args) => {
-          this.$emit("input", this._pond ? this._pond.getFiles() : []);
+          this.$emit("update:files", this._pond ? this._pond.getFiles() : []);
           this.$emit(value.substr(2), ...args);
         };
         return obj;
