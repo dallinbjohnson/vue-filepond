@@ -2,7 +2,7 @@
  * vue-filepond v7.0.3
  * A handy FilePond adapter component for Vue
  * 
- * Copyright (c) 2022 PQINA
+ * Copyright (c) 2023 PQINA
  * https://pqina.nl/filepond
  * 
  * Licensed under the MIT license.
@@ -35,6 +35,14 @@
   function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
   function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+  function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+  function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+  function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+  function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
   // Methods not made available to the component
   var filteredComponentMethods = ["setOptions", "on", "off", "onOnce", "appendTo", "insertAfter", "insertBefore", "isAttachedTo", "replaceElement", "restoreElement", "destroy"]; // Test if is supported on this client
@@ -103,6 +111,9 @@
     return {
       name: "FilePond",
       props: props,
+      emits: ['update:files'].concat(_toConsumableArray(events.map(function (value) {
+        return value.substr(2);
+      }))),
       render: function render() {
         // clean up undefined attributes
         var attributes = Object.entries({
@@ -134,6 +145,8 @@
 
         this.watchers = Object.keys(props).map(function (key) {
           return _this.$watch(key, function (next) {
+            // if pond is not initialized, don't update
+            if (!_this._pond) return;
             _this._pond[key] = next;
           });
         });
@@ -149,7 +162,7 @@
 
         var options = events.reduce(function (obj, value) {
           obj[value] = function () {
-            _this2.$emit("input", _this2._pond ? _this2._pond.getFiles() : []);
+            _this2.$emit("update:files", _this2._pond ? _this2._pond.getFiles() : []);
 
             for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
               args[_key] = arguments[_key];
