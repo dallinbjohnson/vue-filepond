@@ -1,5 +1,5 @@
 /*!
- * vue-filepond v7.0.3
+ * @dallin.b.johnson/vue-filepond v7.0.3
  * A handy FilePond adapter component for Vue
  * 
  * Copyright (c) 2023 PQINA
