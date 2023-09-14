@@ -93,6 +93,7 @@ export default (...plugins) => {
   return {
     name: "FilePond",
     props,
+    emits: ['update:files', ...events.map((value) => value.substr(2))],
 
     render() {
       // clean up undefined attributes
